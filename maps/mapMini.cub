@@ -1,0 +1,9 @@
+NO ./textures/NO/norte.png
+SO ./textures/SO/sur.png
+WE ./textures/WE/oeste.png
+EA ./textures/EA/este.png
+F 128,128,128
+C 0,200,255
+ 11
+1W01
+ 11
