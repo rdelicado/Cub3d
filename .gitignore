@@ -1,0 +1,12 @@
+// Grupo 1: Archivos y directorios generados por el IDE
+.vscode/*
+// Grupo 2: Archivos de dibujo
+*.excalidraw
+// Grupo 3: Archivos objeto y ejecutables
+*.o
+cub3d
+*.dSYM
+*.out
+// Grupo 4: Archivos temporales
+*.swp
+*.swo
