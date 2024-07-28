@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rdelicad <rdelicad@student.42.com>         +#+  +:+       +#+        */
+/*   By: lxuxer <lxuxer@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 14:39:42 by rdelicad          #+#    #+#             */
-/*   Updated: 2024/01/18 09:19:07 by rdelicad         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:58:41 by lxuxer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,40 @@ void	position_direcction_ray(t_ray *r, int x)
 }
 /**
  * @brief Calcula la hipotenusa de los siguientes triangulos
+ * Q_rsqrt se utiliza para calcular la inversa de la raíz cuadrada de ray_dir_x * ray_dir_x y ray_dir_y * ray_dir_y, 
+ * lo que proporciona una forma más rápida de obtener delta_dist_x y delta_dist_y.
 */
 
+float Q_rsqrt(float x)
+{
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5F;
+    const long magic_number = 0x5f3759df;
+
+    x2 = x * 0.5F;
+    y = x;
+    i = *(long *)&x;        // evil floating point bit level hacking
+    i = magic_number - (i >> 1); // what the fuck?
+    y = *(float *)&i;
+    y = y * (threehalfs - (x2 * y * y)); // 1st iteration
+    // y = y * (threehalfs - (x2 * y * y)); // 2nd iteration, this can be removed
+    return y;
+}
+
+void delta_dist(t_ray *r)
+{
+    if (r->ray_dir_x == 0)
+        r->delta_dist_x = INFINITE;
+    else
+        r->delta_dist_x = fabs(Q_rsqrt(r->ray_dir_x * r->ray_dir_x));
+    if (r->ray_dir_y == 0)
+        r->delta_dist_y = INFINITE;
+    else
+        r->delta_dist_y = fabs(Q_rsqrt(r->ray_dir_y * r->ray_dir_y));
+}
+
+/* // Original
 void	delta_dist(t_ray *r)
 {
 	if (r->ray_dir_x == 0)
@@ -36,7 +68,7 @@ void	delta_dist(t_ray *r)
 		r->delta_dist_y = INFINITE;
 	else
 		r->delta_dist_y = fabs(1 / r->ray_dir_y);
-}
+} */
 
 /**
 * @brief Calcula la hipotenusa desde el jugador
